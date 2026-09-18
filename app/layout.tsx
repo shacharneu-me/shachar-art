@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 
 import './globals.css'
 
+import { LandingCurtain } from '@/components/landing-curtain'
+import { LandingVisual } from '@/components/landing-visual'
 import { fallbackArtistName, siteUrl } from '@/lib/site'
 import { socialImageUrl } from '@/sanity/lib/image'
 import { getSettings } from '@/sanity/lib/content'
@@ -47,10 +49,20 @@ export async function generateMetadata(): Promise<Metadata> {
  * Deliberately minimal: the visible site chrome lives in `app/(site)/layout.tsx`
  * so that the Studio at /studio renders on its own.
  */
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSettings()
+
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body>{children}</body>
+      <body>
+        <LandingCurtain>
+          <LandingVisual
+            artistName={settings?.artistName || fallbackArtistName}
+            image={settings?.landingImage}
+          />
+        </LandingCurtain>
+        {children}
+      </body>
     </html>
   )
 }
