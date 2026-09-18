@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 
 import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
-import { PageHeading } from '@/components/page-heading'
 import { WorksList } from '@/components/works-list'
 import { absoluteUrl, fallbackArtistName, shell } from '@/lib/site'
 import { imageUrl } from '@/sanity/lib/image'
@@ -26,7 +25,8 @@ export default async function WorksPage() {
   const artistName = settings?.artistName || fallbackArtistName
 
   return (
-    <div className={shell}>
+    <div className="mx-auto w-full max-w-[110rem] px-5 sm:px-10">
+      <h1 className="sr-only">Works</h1>
       {works.length ? (
         <JsonLd
           data={{
@@ -51,9 +51,13 @@ export default async function WorksPage() {
         />
       ) : null}
 
-      <PageHeading title="Works" />
-
-      {works.length ? <WorksList works={works} /> : <EmptyState label="your first work" />}
+      {works.length ? (
+        <WorksList works={works} />
+      ) : (
+        <div className={shell}>
+          <EmptyState label="your first work" />
+        </div>
+      )}
     </div>
   )
 }

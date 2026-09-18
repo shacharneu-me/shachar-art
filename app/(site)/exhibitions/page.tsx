@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 
 import { EmptyState } from '@/components/empty-state'
 import { ExhibitionsList } from '@/components/exhibitions-list'
-import { PageHeading } from '@/components/page-heading'
 import { fallbackArtistName, shell } from '@/lib/site'
 import { getExhibitions, getSettings } from '@/sanity/lib/content'
 
@@ -27,9 +26,8 @@ export default async function ExhibitionsPage() {
   const exhibitions = await getExhibitions()
 
   return (
-    <div className={shell}>
-      <PageHeading title="Selected Exhibitions" />
-
+    <div className={`${shell} pt-6 sm:pt-8`}>
+      <h1 className="sr-only">Selected Exhibitions</h1>
       {exhibitions.length ? (
         <ExhibitionsList exhibitions={exhibitions} />
       ) : (

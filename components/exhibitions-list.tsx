@@ -5,7 +5,7 @@ import type { ExhibitionListItem } from '@/sanity/lib/types'
 export function ExhibitionsList({ exhibitions }: { exhibitions: ExhibitionListItem[] }) {
   return (
     <>
-      <ul>
+      <ul className="[&>li:first-child]:border-t-0">
         {exhibitions.map((exhibition) => (
           <li key={exhibition._id} className="hairline">
             <Link

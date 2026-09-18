@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
-import { PageHeading } from '@/components/page-heading'
 import { RichText } from '@/components/rich-text'
 import { SanityImage } from '@/components/sanity-image'
 import { absoluteUrl, fallbackArtistName, shell, siteUrl } from '@/lib/site'
@@ -34,6 +33,7 @@ export default async function AboutPage() {
 
   return (
     <div className={shell}>
+      <h1 className="sr-only">{about?.heading || 'About'}</h1>
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -48,11 +48,9 @@ export default async function AboutPage() {
         }}
       />
 
-      <PageHeading title={about?.heading || 'About'} />
-
       {about?.text?.length || hasImage ? (
         <div
-          className={`hairline grid gap-8 py-8 sm:py-10 md:gap-12 ${
+          className={`grid gap-8 py-8 sm:py-12 md:gap-12 ${
             hasImage ? 'md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]' : ''
           }`}
         >

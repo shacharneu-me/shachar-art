@@ -7,7 +7,7 @@ export function SiteHeader({ artistName }: { artistName: string }) {
   return (
     <header className="sticky top-0 z-30 bg-paper">
       <div
-        className={`${shell} flex flex-col gap-2 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:py-5`}
+        className={`${shell} flex flex-col gap-2 py-4 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-baseline sm:py-5`}
       >
         <Link
           href="/"
