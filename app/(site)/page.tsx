@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 
+import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
+import { SanityImage } from '@/components/sanity-image'
 import { fallbackArtistName, shell, siteUrl } from '@/lib/site'
 import { getSettings } from '@/sanity/lib/content'
 
@@ -21,6 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LandingPage() {
   const settings = await getSettings()
   const artistName = settings?.artistName || fallbackArtistName
+  const hasImage = Boolean(settings?.landingImage?.asset?.url)
 
   return (
     <div className={shell}>
@@ -36,9 +39,17 @@ export default async function LandingPage() {
       />
 
       <div className="py-8 sm:py-10">
-        <div className="hairline flex aspect-[4/5] items-center justify-center border border-dashed border-rule text-nav tracking-[0.14em] text-muted uppercase sm:aspect-[16/10]">
-          Landing image
-        </div>
+        {hasImage ? (
+          <SanityImage
+            image={settings?.landingImage}
+            fallbackAlt={artistName}
+            sizes="100vw"
+            className="h-auto w-full"
+            priority
+          />
+        ) : (
+          <EmptyState label="a landing image" />
+        )}
       </div>
     </div>
   )

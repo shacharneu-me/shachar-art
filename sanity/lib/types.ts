@@ -22,6 +22,7 @@ export type Settings = {
   email?: string | null
   instagram?: string | null
   socialImage?: SanityImage | null
+  landingImage?: SanityImage | null
 }
 
 export type About = {

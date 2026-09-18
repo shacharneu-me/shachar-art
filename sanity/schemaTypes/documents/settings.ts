@@ -19,6 +19,12 @@ export const settings = defineType({
       description: 'Optional. A short line under the name, e.g. “Artist, Tel Aviv”.',
     }),
     defineField({
+      name: 'landingImage',
+      title: 'Landing image',
+      type: 'figure',
+      description: 'The large image shown on the homepage.',
+    }),
+    defineField({
       name: 'siteDescription',
       title: 'Search description',
       type: 'text',

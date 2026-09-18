@@ -33,7 +33,8 @@ export const settingsQuery = defineQuery(`*[_id == "settings"][0] {
   siteDescription,
   email,
   instagram,
-  socialImage ${IMAGE}
+  socialImage ${IMAGE},
+  landingImage ${IMAGE}
 }`)
 
 export const aboutQuery = defineQuery(`*[_id == "about"][0] {
