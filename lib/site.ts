@@ -8,10 +8,9 @@ export function absoluteUrl(path: string): string {
 }
 
 export const navItems = [
-  { href: '/', label: 'About' },
-  { href: '/cv', label: 'CV' },
   { href: '/works', label: 'Works' },
   { href: '/exhibitions', label: 'Selected Exhibitions' },
+  { href: '/about', label: 'About' },
 ] as const
 
 /** Used until the artist fills in Site settings in the Studio. */
