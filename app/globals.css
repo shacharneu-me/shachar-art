@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f2f0eb;
+  --color-ink: #111111;
+  --color-muted: #6b6b66;
+  --color-rule: #111111;
+
+  --font-sans:
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --text-nav: 0.8125rem;
+  --text-nav--line-height: 1.2;
+
+  --container-text: 68ch;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Reserves the scrollbar so locking scroll for the overlay shifts nothing. */
+    scrollbar-gutter: stable;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+@utility hairline {
+  border-top: 1px solid var(--color-rule);
+}
+
+/* Stacked blocks separated by a line, used inside the work overlay. */
+.rule-list > * + * {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-rule);
+}
+
+/* Long-form text coming out of the CMS. */
+.prose-art {
+  max-width: var(--container-text);
+}
+
+.prose-art p,
+.prose-art ul {
+  margin-bottom: 1.1em;
+}
+
+.prose-art p:last-child,
+.prose-art ul:last-child {
+  margin-bottom: 0;
+}
+
+.prose-art h2 {
+  margin-top: 2.25em;
+  margin-bottom: 0.6em;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.prose-art h3 {
+  margin-top: 1.75em;
+  margin-bottom: 0.4em;
+  font-weight: 600;
+}
+
+.prose-art h2:first-child,
+.prose-art h3:first-child {
+  margin-top: 0;
+}
+
+.prose-art ul {
+  padding-left: 1.1em;
+  list-style: none;
+}
+
+.prose-art li {
+  position: relative;
+  margin-bottom: 0.35em;
+}
+
+.prose-art li::before {
+  content: '—';
+  position: absolute;
+  left: -1.1em;
+  color: var(--color-muted);
+}
+
+.prose-art a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.prose-art a:hover {
+  color: var(--color-muted);
+}
+
+.prose-art strong {
+  font-weight: 600;
+}
