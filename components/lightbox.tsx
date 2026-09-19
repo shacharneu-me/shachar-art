@@ -12,6 +12,8 @@ export type LightboxItem = {
   title?: string | null
   /** Date, or the photographer's credit. */
   note?: string | null
+  /** A work's materials, on its own line under the title. */
+  details?: string | null
 }
 
 /**
@@ -24,11 +26,14 @@ export type LightboxItem = {
 export function Lightbox({
   items,
   index,
+  label,
   onClose,
   onIndex,
 }: {
   items: LightboxItem[]
   index: number | null
+  /** Which set you are looking at, e.g. Installation View or Works. */
+  label: string
   onClose: () => void
   onIndex: (next: number) => void
 }) {
@@ -106,6 +111,10 @@ export function Lightbox({
         className="absolute inset-0 cursor-zoom-out"
       />
 
+      <p className="absolute top-4 left-5 z-10 text-nav tracking-[0.14em] text-muted/60 uppercase sm:top-6 sm:left-8">
+        {label}
+      </p>
+
       <button
         ref={closeRef}
         type="button"
@@ -134,10 +143,17 @@ export function Lightbox({
           className="h-auto max-h-[74dvh] w-auto max-w-full object-contain"
           priority
         />
-        {item.title || item.note ? (
-          <figcaption className="mt-3 flex gap-4 text-[0.625rem] tracking-[0.07em] text-muted/70 uppercase">
-            {item.title ? <span>{item.title}</span> : null}
-            {item.note ? <span className="text-muted/50">{item.note}</span> : null}
+        {item.title || item.note || item.details ? (
+          <figcaption className="mt-3 max-w-full text-center text-[0.625rem] tracking-[0.07em] uppercase">
+            {item.title || item.note ? (
+              <span className="flex justify-center gap-4 text-muted/70">
+                {item.title ? <span>{item.title}</span> : null}
+                {item.note ? <span className="text-muted/50">{item.note}</span> : null}
+              </span>
+            ) : null}
+            {item.details ? (
+              <span className="mt-1 block text-muted/50 normal-case">{item.details}</span>
+            ) : null}
           </figcaption>
         ) : null}
       </figure>

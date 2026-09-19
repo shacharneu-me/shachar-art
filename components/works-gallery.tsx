@@ -16,6 +16,7 @@ export function WorksGallery({ works }: { works: Work[] }) {
     image: work.coverImage as SanityImageType,
     title: work.title,
     note: work.displayDate,
+    details: work.materials,
   }))
 
   return (
@@ -45,7 +46,13 @@ export function WorksGallery({ works }: { works: Work[] }) {
         ))}
       </GalleryRail>
 
-      <Lightbox items={items} index={open} onClose={() => setOpen(null)} onIndex={setOpen} />
+      <Lightbox
+        items={items}
+        index={open}
+        label="Works"
+        onClose={() => setOpen(null)}
+        onIndex={setOpen}
+      />
     </section>
   )
 }

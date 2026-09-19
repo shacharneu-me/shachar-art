@@ -85,7 +85,13 @@ export function InstallationSection({
         </section>
       ) : null}
 
-      <Lightbox items={items} index={open} onClose={() => setOpen(null)} onIndex={setOpen} />
+      <Lightbox
+        items={items}
+        index={open}
+        label="Installation View"
+        onClose={() => setOpen(null)}
+        onIndex={setOpen}
+      />
     </>
   )
 }
