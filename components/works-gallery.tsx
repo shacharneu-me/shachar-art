@@ -1,25 +1,34 @@
 'use client'
 
+import { useState } from 'react'
+
 import { GalleryLabel, GalleryRail } from '@/components/horizontal-gallery'
+import { Lightbox, type LightboxItem } from '@/components/lightbox'
 import { SanityImage } from '@/components/sanity-image'
-import { useWorkModal } from '@/components/work-modal-provider'
-import type { Work } from '@/sanity/lib/types'
+import type { SanityImage as SanityImageType, Work } from '@/sanity/lib/types'
 
 /** The works of one exhibition, as a strip you scroll sideways. */
 export function WorksGallery({ works }: { works: Work[] }) {
-  const { openWork } = useWorkModal()
+  const [open, setOpen] = useState<number | null>(null)
+
+  const shown = works.filter((work) => work.coverImage?.asset?.url)
+  const items: LightboxItem[] = shown.map((work) => ({
+    image: work.coverImage as SanityImageType,
+    title: work.title,
+    note: work.displayDate,
+  }))
 
   return (
     <section>
       <GalleryLabel>Works</GalleryLabel>
       <GalleryRail>
-        {works.map((work) => (
+        {shown.map((work, index) => (
           <li key={work._id} className="shrink-0 snap-start">
             <button
               type="button"
-              onClick={() => openWork(work)}
+              onClick={() => setOpen(index)}
               aria-label={`${work.title}${work.displayDate ? `, ${work.displayDate}` : ''}`}
-              className="group block cursor-pointer text-left"
+              className="group block cursor-zoom-in text-left"
             >
               <SanityImage
                 image={work.coverImage}
@@ -35,6 +44,8 @@ export function WorksGallery({ works }: { works: Work[] }) {
           </li>
         ))}
       </GalleryRail>
+
+      <Lightbox items={items} index={open} onClose={() => setOpen(null)} onIndex={setOpen} />
     </section>
   )
 }

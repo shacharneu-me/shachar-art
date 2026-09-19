@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { InstallationGallery, InstallationLeads } from '@/components/installation-images'
+import { InstallationSection } from '@/components/installation-images'
 import { JsonLd } from '@/components/json-ld'
 import { RichText } from '@/components/rich-text'
 import { WorksGallery } from '@/components/works-gallery'
@@ -57,8 +57,6 @@ export default async function ExhibitionPage({ params }: Props) {
 
   const artistName = settings?.artistName || fallbackArtistName
   const installations = exhibition.installationImages ?? []
-  const leads = installations.filter((image) => image.placement !== 'gallery')
-  const gallery = installations.filter((image) => image.placement === 'gallery')
   const credit = [exhibition.curator, exhibition.dateText].filter(Boolean).join(' | ')
   const hasText = Boolean(exhibition.curatorialText?.length)
 
@@ -104,12 +102,8 @@ export default async function ExhibitionPage({ params }: Props) {
         ) : null}
       </header>
 
-      {leads.length ? <InstallationLeads images={leads} fallbackAlt={exhibition.title} /> : null}
-
-      {gallery.length ? (
-        <div className="pt-[14vh] sm:pt-[20vh]">
-          <InstallationGallery images={gallery} fallbackAlt={exhibition.title} />
-        </div>
+      {installations.length ? (
+        <InstallationSection images={installations} fallbackAlt={exhibition.title} />
       ) : null}
 
       {exhibition.works.length ? (

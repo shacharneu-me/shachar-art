@@ -54,6 +54,18 @@
   border-top: 1px solid var(--color-rule);
 }
 
+/* One picture at a time, with the page left blurred behind it. */
+.lightbox {
+  animation: work-backdrop-in 380ms ease both;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox {
+    animation: none;
+  }
+}
+
 /* The work overlay eases in rather than snapping open. */
 .work-dialog[open] {
   animation: work-dialog-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
