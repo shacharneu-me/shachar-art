@@ -15,6 +15,7 @@ const WORK = /* groq */ `{
   _id,
   title,
   "displayDate": coalesce(displayDate, string::split(coalesce(date, ""), "-")[0], ""),
+  "year": string::split(coalesce(date, ""), "-")[0],
   materials,
   text,
   coverImage ${IMAGE},

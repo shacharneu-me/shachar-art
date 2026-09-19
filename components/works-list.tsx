@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { SanityImage } from '@/components/sanity-image'
 import { useWorkModal } from '@/components/work-modal-provider'
 import { imageDimensions } from '@/sanity/lib/image'
+import { isFirstOfYear, yearAnchorId } from '@/lib/works'
 import type { Work } from '@/sanity/lib/types'
 
 /**
@@ -31,6 +32,7 @@ export function WorksList({ works }: { works: Work[] }) {
           work={work}
           placement={placements[index % placements.length]}
           priority={index === 0}
+          anchorId={isFirstOfYear(works, index) ? yearAnchorId(work.year) : undefined}
         />
       ))}
     </ul>
@@ -41,10 +43,12 @@ function WorkFigure({
   work,
   placement,
   priority,
+  anchorId,
 }: {
   work: Work
   placement: (typeof placements)[number]
   priority: boolean
+  anchorId?: string
 }) {
   const { openWork } = useWorkModal()
   const revealRef = useRef<HTMLDivElement>(null)
@@ -105,7 +109,10 @@ function WorkFigure({
   }, [placement])
 
   return (
-    <li className={`my-[14vh] flex first:mt-[6vh] sm:my-[24vh] ${placement.row}`}>
+    <li
+      id={anchorId}
+      className={`my-[14vh] flex scroll-mt-32 first:mt-[6vh] sm:my-[24vh] ${placement.row}`}
+    >
       <div
         ref={revealRef}
         className={`w-full ${placement.width} transition-[opacity,transform] duration-[2200ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${

@@ -3,7 +3,9 @@ import type { Metadata } from 'next'
 import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
 import { WorksList } from '@/components/works-list'
+import { WorksYearBar } from '@/components/works-year-bar'
 import { absoluteUrl, fallbackArtistName, shell } from '@/lib/site'
+import { yearsInOrder } from '@/lib/works'
 import { imageUrl } from '@/sanity/lib/image'
 import { getSettings, getWorks } from '@/sanity/lib/content'
 
@@ -50,6 +52,8 @@ export default async function WorksPage() {
           }}
         />
       ) : null}
+
+      {works.length ? <WorksYearBar years={yearsInOrder(works)} /> : null}
 
       {works.length ? (
         <WorksList works={works} />

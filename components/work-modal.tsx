@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 
 import { RichText } from '@/components/rich-text'
@@ -11,6 +11,13 @@ export function WorkModal({ work, onClose }: { work: Work | null; onClose: () =>
   const dialogRef = useRef<HTMLDialogElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
   const headingId = useId()
+  const [zoomed, setZoomed] = useState<number | null>(null)
+  const [shownWork, setShownWork] = useState(work)
+
+  if (shownWork !== work) {
+    setShownWork(work)
+    setZoomed(null)
+  }
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -53,10 +60,10 @@ export function WorkModal({ work, onClose }: { work: Work | null; onClose: () =>
         // A click landing on the dialog itself is a click on the backdrop.
         if (event.target === dialogRef.current) onClose()
       }}
-      className="m-auto w-[calc(100vw-1.5rem)] max-w-5xl border border-ink bg-paper p-0 text-ink backdrop:bg-black/45 sm:w-[calc(100vw-4rem)]"
+      className="work-dialog m-auto h-[calc(100dvh-1.5rem)] w-[calc(100vw-1.5rem)] max-w-none border border-ink bg-paper p-0 text-ink backdrop:bg-black/60 sm:h-[calc(100dvh-3rem)] sm:w-[calc(100vw-3rem)]"
     >
       {work ? (
-        <div ref={scrollRef} className="max-h-[92dvh] overflow-y-auto overscroll-contain">
+        <div ref={scrollRef} className="h-full overflow-y-auto overscroll-contain">
           <div className="sticky top-0 z-10 bg-paper px-5 pt-5 sm:px-8 sm:pt-6">
             <div className="flex items-start justify-between gap-6">
               <div>
@@ -77,29 +84,48 @@ export function WorkModal({ work, onClose }: { work: Work | null; onClose: () =>
             <div className="hairline mt-4" />
           </div>
 
-          <div className="grid gap-8 px-5 py-6 sm:px-8 sm:py-8 md:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] md:gap-12">
-            <div className="space-y-6">
-              {images.map((image, index) => (
-                <figure key={image.asset?._id ?? index}>
-                  <SanityImage
-                    image={image}
-                    fallbackAlt={work.title}
-                    sizes="(min-width: 768px) 55vw, 92vw"
-                    className="h-auto w-full"
-                    priority={index === 0}
-                  />
-                  {image.caption ? (
-                    <figcaption className="mt-2 text-nav text-muted">{image.caption}</figcaption>
-                  ) : null}
-                </figure>
-              ))}
+          <div className="grid gap-8 px-5 py-6 sm:px-8 sm:py-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-12">
+            <div className="space-y-8">
+              {images.map((image, index) => {
+                const isZoomed = zoomed === index
+
+                return (
+                  <figure key={image.asset?._id ?? index}>
+                    <div className={isZoomed ? 'overflow-auto' : ''}>
+                      <button
+                        type="button"
+                        onClick={() => setZoomed(isZoomed ? null : index)}
+                        aria-label={isZoomed ? 'Zoom out' : 'Zoom in'}
+                        className={`block ${isZoomed ? 'w-[220%] cursor-zoom-out' : 'w-full cursor-zoom-in'}`}
+                      >
+                        <SanityImage
+                          image={image}
+                          fallbackAlt={work.title}
+                          sizes={isZoomed ? '220vw' : '(min-width: 768px) 62vw, 92vw'}
+                          // Unzoomed, a work is held within the visible area so
+                          // the whole thing is readable without scrolling.
+                          className={
+                            isZoomed
+                              ? 'h-auto w-full'
+                              : 'mx-auto h-auto max-h-[58dvh] w-auto max-w-full sm:max-h-[68dvh]'
+                          }
+                          priority={index === 0}
+                        />
+                      </button>
+                    </div>
+                    {image.caption ? (
+                      <figcaption className="mt-2 text-nav text-muted">{image.caption}</figcaption>
+                    ) : null}
+                  </figure>
+                )
+              })}
             </div>
 
             <div className="rule-list md:sticky md:top-24 md:self-start">
               {work.materials ? (
-                <Detail label="Materials">
+                <div>
                   <p className="whitespace-pre-line">{work.materials}</p>
-                </Detail>
+                </div>
               ) : null}
 
               {work.exhibition?.slug ? (
@@ -117,9 +143,9 @@ export function WorkModal({ work, onClose }: { work: Work | null; onClose: () =>
               ) : null}
 
               {work.text?.length ? (
-                <Detail label="Text">
+                <div>
                   <RichText value={work.text} />
-                </Detail>
+                </div>
               ) : null}
             </div>
           </div>

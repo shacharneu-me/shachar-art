@@ -54,6 +54,35 @@
   border-top: 1px solid var(--color-rule);
 }
 
+/* The work overlay eases in rather than snapping open. */
+.work-dialog[open] {
+  animation: work-dialog-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.work-dialog[open]::backdrop {
+  animation: work-backdrop-in 420ms ease both;
+}
+
+@keyframes work-dialog-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985) translateY(8px);
+  }
+}
+
+@keyframes work-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-dialog[open],
+  .work-dialog[open]::backdrop {
+    animation: none;
+  }
+}
+
 /* Stacked blocks separated by a line, used inside the work overlay. */
 .rule-list > * + * {
   margin-top: 1.25rem;

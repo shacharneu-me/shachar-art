@@ -51,6 +51,8 @@ export type Work = {
   _id: string
   title: string
   displayDate: string
+  /** Four-digit year from the work's date, used to group and jump around. */
+  year: string
   materials?: string | null
   text?: PortableTextBlock[] | null
   coverImage?: SanityImage | null
