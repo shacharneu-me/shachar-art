@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { SanityImage } from '@/components/sanity-image'
 import { useWorkModal } from '@/components/work-modal-provider'
 import { imageDimensions } from '@/sanity/lib/image'
-import { isFirstOfYear, yearAnchorId } from '@/lib/works'
+import { buildWorkRows, type WorkRow } from '@/lib/works'
 import type { Work } from '@/sanity/lib/types'
 
 /**
@@ -24,18 +24,88 @@ const placements = [
 const MAX_HEIGHT_VH = 88
 
 export function WorksList({ works }: { works: Work[] }) {
+  const rows = buildWorkRows(works)
+
   return (
     <ul>
-      {works.map((work, index) => (
-        <WorkFigure
-          key={work._id}
-          work={work}
-          placement={placements[index % placements.length]}
-          priority={index === 0}
-          anchorId={isFirstOfYear(works, index) ? yearAnchorId(work.year) : undefined}
-        />
-      ))}
+      {rows.map((row, index) =>
+        row.works.length > 1 ? (
+          <SeriesRow key={row.key} row={row} />
+        ) : (
+          <WorkFigure
+            key={row.key}
+            work={row.works[0]}
+            placement={placements[index % placements.length]}
+            priority={index === 0}
+            anchorId={row.anchorId}
+          />
+        ),
+      )}
     </ul>
+  )
+}
+
+/** Reveals its contents once, slowly, when they first come into view. */
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [revealed, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setRevealed(true)
+      },
+      { rootMargin: '0px 0px -8% 0px' },
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
+  return { ref, revealed }
+}
+
+const revealClass = (revealed: boolean) =>
+  `transition-[opacity,transform] duration-[2200ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${
+    revealed ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+  }`
+
+/** A series reads as one piece: its works sit across a row, sharing a baseline. */
+function SeriesRow({ row }: { row: WorkRow }) {
+  const { openWork } = useWorkModal()
+  const { ref, revealed } = useReveal()
+
+  return (
+    <li id={row.anchorId} className="my-[14vh] scroll-mt-32 first:mt-[6vh] sm:my-[24vh]">
+      <div ref={ref} className={revealClass(revealed)}>
+        <div className="-mr-5 overflow-x-auto sm:-mr-10">
+          <div className="flex items-end justify-start gap-6 pr-5 sm:justify-center sm:gap-10 sm:pr-10">
+            {row.works.map((work) => (
+              <button
+                key={work._id}
+                type="button"
+                onClick={() => openWork(work)}
+                aria-label={`${work.title}${work.displayDate ? `, ${work.displayDate}` : ''}`}
+                className="group shrink-0 cursor-pointer text-left"
+              >
+                <SanityImage
+                  image={work.coverImage}
+                  fallbackAlt={work.title}
+                  sizes="(min-width: 640px) 40vh, 60vw"
+                  className="h-[26vh] w-auto max-w-none shadow-[0_50px_90px_-50px_rgba(0,0,0,0.4)] transition-opacity duration-1000 group-hover:opacity-90 sm:h-[52vh]"
+                />
+                <div className="mt-5 flex items-baseline gap-4 text-[0.6875rem] tracking-[0.08em] text-muted uppercase transition-colors duration-1000 group-hover:text-ink">
+                  <h2 className="font-normal">{work.title}</h2>
+                  {work.displayDate ? <p>{work.displayDate}</p> : null}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </li>
   )
 }
 
@@ -115,9 +185,7 @@ function WorkFigure({
     >
       <div
         ref={revealRef}
-        className={`w-full ${placement.width} transition-[opacity,transform] duration-[2200ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${
-          revealed ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}
+        className={`w-full ${placement.width} ${revealClass(revealed)}`}
         // Never wider than the work would be at full viewport height.
         style={{ width: `min(100%, calc(${MAX_HEIGHT_VH}vh * ${ratio.toFixed(4)}))` }}
       >

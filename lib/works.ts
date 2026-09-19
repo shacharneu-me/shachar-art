@@ -13,9 +13,42 @@ export function yearsInOrder(works: Work[]): string[] {
   return seen
 }
 
-/** True when this work is the first of its year, so it can carry the anchor. */
-export function isFirstOfYear(works: Work[], index: number): boolean {
-  const { year } = works[index]
-  if (!year) return false
-  return works.findIndex((work) => work.year === year) === index
+/** One band of the Works page: a lone work, or a whole series across a row. */
+export type WorkRow = {
+  key: string
+  works: Work[]
+  /** Set when this row is where a year first appears. */
+  anchorId?: string
+}
+
+/**
+ * Works keep their order, except that a series is pulled together into a single
+ * row at the position of its first member.
+ */
+export function buildWorkRows(works: Work[]): WorkRow[] {
+  const rows: WorkRow[] = []
+  const placed = new Set<string>()
+
+  for (const work of works) {
+    const seriesId = work.series?._id
+
+    if (!seriesId) {
+      rows.push({ key: work._id, works: [work] })
+      continue
+    }
+
+    if (placed.has(seriesId)) continue
+    placed.add(seriesId)
+    rows.push({ key: seriesId, works: works.filter((other) => other.series?._id === seriesId) })
+  }
+
+  const anchored = new Set<string>()
+  for (const row of rows) {
+    const year = row.works.find((work) => work.year && !anchored.has(work.year))?.year
+    if (!year) continue
+    anchored.add(year)
+    row.anchorId = yearAnchorId(year)
+  }
+
+  return rows
 }

@@ -2,23 +2,16 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import {
-  INSTALLATION_SECTION_ID,
-  InstallationGallery,
-  InstallationLeads,
-} from '@/components/installation-images'
+import { InstallationGallery, InstallationLeads } from '@/components/installation-images'
 import { JsonLd } from '@/components/json-ld'
 import { RichText } from '@/components/rich-text'
-import { SectionBar } from '@/components/section-bar'
-import { WORKS_SECTION_ID, WorksGallery } from '@/components/works-gallery'
+import { WorksGallery } from '@/components/works-gallery'
 import { absoluteUrl, fallbackArtistName } from '@/lib/site'
 import { excerpt, toPlainText } from '@/lib/text'
 import { socialImageUrl } from '@/sanity/lib/image'
 import { getExhibition, getExhibitionSlugs, getSettings } from '@/sanity/lib/content'
 
 type Props = { params: Promise<{ slug: string }> }
-
-const TEXT_SECTION_ID = 'text'
 
 export async function generateStaticParams() {
   const slugs = await getExhibitionSlugs()
@@ -69,12 +62,6 @@ export default async function ExhibitionPage({ params }: Props) {
   const credit = [exhibition.curator, exhibition.dateText].filter(Boolean).join(' | ')
   const hasText = Boolean(exhibition.curatorialText?.length)
 
-  const sections = [
-    gallery.length ? { id: INSTALLATION_SECTION_ID, label: 'Installation view' } : null,
-    exhibition.works.length ? { id: WORKS_SECTION_ID, label: 'Works' } : null,
-    hasText ? { id: TEXT_SECTION_ID, label: 'Text' } : null,
-  ].filter((item) => item !== null)
-
   return (
     <div className="mx-auto w-full max-w-[110rem] px-5 sm:px-10">
       <JsonLd
@@ -98,7 +85,7 @@ export default async function ExhibitionPage({ params }: Props) {
         }}
       />
 
-      <header className="pt-8 pb-[10vh] sm:pt-10 sm:pb-[14vh]">
+      <header className="pt-8 pb-8 sm:pt-10 sm:pb-10">
         <Link
           href="/exhibitions"
           className="text-nav tracking-[0.1em] text-muted/60 uppercase transition-colors duration-500 hover:text-ink"
@@ -117,13 +104,7 @@ export default async function ExhibitionPage({ params }: Props) {
         ) : null}
       </header>
 
-      {sections.length ? <SectionBar items={sections} /> : null}
-
-      {leads.length ? (
-        <div className="pt-[8vh] sm:pt-[10vh]">
-          <InstallationLeads images={leads} fallbackAlt={exhibition.title} />
-        </div>
-      ) : null}
+      {leads.length ? <InstallationLeads images={leads} fallbackAlt={exhibition.title} /> : null}
 
       {gallery.length ? (
         <div className="pt-[14vh] sm:pt-[20vh]">
@@ -138,10 +119,7 @@ export default async function ExhibitionPage({ params }: Props) {
       ) : null}
 
       {hasText ? (
-        <div
-          id={TEXT_SECTION_ID}
-          className="mt-[14vh] mb-[6vh] max-w-text scroll-mt-32 sm:mt-[20vh]"
-        >
+        <div className="mt-[14vh] mb-[6vh] max-w-text sm:mt-[20vh]">
           <RichText value={exhibition.curatorialText} />
         </div>
       ) : null}

@@ -18,6 +18,7 @@ export const structure: StructureResolver = (S) =>
         .child(S.document().schemaType('cv').documentId('cv').title('CV')),
       S.divider(),
       S.documentTypeListItem('work').title('Works'),
+      S.documentTypeListItem('series').title('Series'),
       S.documentTypeListItem('exhibition').title('Selected Exhibitions'),
       S.divider(),
       S.listItem()

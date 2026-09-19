@@ -20,6 +20,7 @@ const WORK = /* groq */ `{
   text,
   coverImage ${IMAGE},
   "images": images[] ${IMAGE},
+  "series": *[_type == "series" && references(^._id)][0] { _id, title },
   "exhibition": *[_type == "exhibition" && references(^._id)] | order(date desc)[0] {
     _id,
     title,

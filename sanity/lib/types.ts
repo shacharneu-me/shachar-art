@@ -57,6 +57,8 @@ export type Work = {
   text?: PortableTextBlock[] | null
   coverImage?: SanityImage | null
   images?: SanityImage[] | null
+  /** Set when the work belongs to a series, so the page can group them. */
+  series?: { _id: string; title: string } | null
   exhibition?: WorkExhibitionLink | null
 }
 

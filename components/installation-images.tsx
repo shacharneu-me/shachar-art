@@ -1,8 +1,7 @@
+import { Caption } from '@/components/caption'
 import { GalleryLabel, GalleryRail } from '@/components/horizontal-gallery'
 import { SanityImage } from '@/components/sanity-image'
 import type { InstallationImage } from '@/sanity/lib/types'
-
-export const INSTALLATION_SECTION_ID = 'installation-view'
 
 /** The large and detail shots that open the page, stacked full width. */
 export function InstallationLeads({
@@ -26,11 +25,7 @@ export function InstallationLeads({
             className="h-auto w-full"
             priority={index === 0}
           />
-          {image.caption ? (
-            <figcaption className="mt-3 text-nav tracking-[0.06em] text-muted uppercase">
-              {image.caption}
-            </figcaption>
-          ) : null}
+          {image.caption ? <Caption>{image.caption}</Caption> : null}
         </figure>
       ))}
     </div>
@@ -46,7 +41,7 @@ export function InstallationGallery({
   fallbackAlt: string
 }) {
   return (
-    <section id={INSTALLATION_SECTION_ID} className="scroll-mt-32">
+    <section>
       <GalleryLabel>Installation View</GalleryLabel>
       <GalleryRail>
         {images.map((image, index) => (
@@ -58,11 +53,7 @@ export function InstallationGallery({
                 sizes="(min-width: 640px) 60vh, 80vw"
                 className="h-[44vh] w-auto max-w-none sm:h-[62vh]"
               />
-              {image.caption ? (
-                <figcaption className="mt-3 text-nav tracking-[0.06em] text-muted uppercase">
-                  {image.caption}
-                </figcaption>
-              ) : null}
+              {image.caption ? <Caption>{image.caption}</Caption> : null}
             </figure>
           </li>
         ))}

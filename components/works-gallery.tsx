@@ -5,14 +5,12 @@ import { SanityImage } from '@/components/sanity-image'
 import { useWorkModal } from '@/components/work-modal-provider'
 import type { Work } from '@/sanity/lib/types'
 
-export const WORKS_SECTION_ID = 'works'
-
 /** The works of one exhibition, as a strip you scroll sideways. */
 export function WorksGallery({ works }: { works: Work[] }) {
   const { openWork } = useWorkModal()
 
   return (
-    <section id={WORKS_SECTION_ID} className="scroll-mt-32">
+    <section>
       <GalleryLabel>Works</GalleryLabel>
       <GalleryRail>
         {works.map((work) => (

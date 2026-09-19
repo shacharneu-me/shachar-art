@@ -3,6 +3,7 @@ import type { SchemaTypeDefinition } from 'sanity'
 import { about } from './documents/about'
 import { cv } from './documents/cv'
 import { exhibition } from './documents/exhibition'
+import { series } from './documents/series'
 import { settings } from './documents/settings'
 import { work } from './documents/work'
 import { figure } from './objects/figure'
@@ -14,6 +15,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   cv,
   work,
   exhibition,
+  series,
   settings,
   figure,
   installationImage,

@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import Link from 'next/link'
 
+import { Caption } from '@/components/caption'
 import { RichText } from '@/components/rich-text'
 import { SanityImage } from '@/components/sanity-image'
 import type { SanityImage as SanityImageType, Work } from '@/sanity/lib/types'
@@ -113,9 +114,7 @@ export function WorkModal({ work, onClose }: { work: Work | null; onClose: () =>
                         />
                       </button>
                     </div>
-                    {image.caption ? (
-                      <figcaption className="mt-2 text-nav text-muted">{image.caption}</figcaption>
-                    ) : null}
+                    {image.caption ? <Caption>{image.caption}</Caption> : null}
                   </figure>
                 )
               })}
