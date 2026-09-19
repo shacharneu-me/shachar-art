@@ -39,6 +39,20 @@ export const exhibition = defineType({
       description: 'Optional. Gallery or museum, and city.',
     }),
     defineField({
+      name: 'curator',
+      title: 'Curator',
+      type: 'string',
+      description: 'Optional. Shown next to the date, e.g. “Curated by Ruti Sela”.',
+    }),
+    defineField({
+      name: 'installationImages',
+      title: 'Installation images',
+      type: 'array',
+      of: [{ type: 'installationImage' }],
+      description:
+        'Views of the exhibition, in the order they appear down the page. Drag to reorder, and vary the size of each to give the page a rhythm. These belong to this exhibition only and never show on the Works page.',
+    }),
+    defineField({
       name: 'curatorialText',
       title: 'Curatorial text',
       type: 'richText',

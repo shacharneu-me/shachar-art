@@ -69,12 +69,19 @@ export type ExhibitionListItem = {
   workCount: number
 }
 
+/** A view of the exhibition itself, never a work. */
+export type InstallationImage = SanityImage & {
+  placement?: 'lead' | 'detail' | 'gallery' | null
+}
+
 export type Exhibition = {
   _id: string
   title: string
   slug: string
   dateText: string
   venue?: string | null
+  curator?: string | null
+  installationImages?: InstallationImage[] | null
   curatorialText?: PortableTextBlock[] | null
   coverImage?: SanityImage | null
   seoDescription?: string | null

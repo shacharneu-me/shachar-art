@@ -6,6 +6,7 @@ import { exhibition } from './documents/exhibition'
 import { settings } from './documents/settings'
 import { work } from './documents/work'
 import { figure } from './objects/figure'
+import { installationImage } from './objects/installationImage'
 import { richText } from './objects/richText'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -15,6 +16,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   exhibition,
   settings,
   figure,
+  installationImage,
   richText,
 ]
 

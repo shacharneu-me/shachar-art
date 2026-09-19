@@ -71,7 +71,15 @@ export const exhibitionQuery = defineQuery(`*[_type == "exhibition" && slug.curr
   "slug": slug.current,
   dateText,
   venue,
+  curator,
   curatorialText,
+  "installationImages": installationImages[] {
+    alt,
+    caption,
+    placement,
+    hotspot,
+    asset->{ _id, url, metadata { lqip, dimensions } }
+  },
   coverImage ${IMAGE},
   seoDescription,
   "works": works[]-> ${WORK}

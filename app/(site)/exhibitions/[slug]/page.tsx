@@ -2,15 +2,23 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+import {
+  INSTALLATION_SECTION_ID,
+  InstallationGallery,
+  InstallationLeads,
+} from '@/components/installation-images'
 import { JsonLd } from '@/components/json-ld'
 import { RichText } from '@/components/rich-text'
-import { WorksList } from '@/components/works-list'
-import { absoluteUrl, fallbackArtistName, shell } from '@/lib/site'
+import { SectionBar } from '@/components/section-bar'
+import { WORKS_SECTION_ID, WorksGallery } from '@/components/works-gallery'
+import { absoluteUrl, fallbackArtistName } from '@/lib/site'
 import { excerpt, toPlainText } from '@/lib/text'
 import { socialImageUrl } from '@/sanity/lib/image'
 import { getExhibition, getExhibitionSlugs, getSettings } from '@/sanity/lib/content'
 
 type Props = { params: Promise<{ slug: string }> }
+
+const TEXT_SECTION_ID = 'text'
 
 export async function generateStaticParams() {
   const slugs = await getExhibitionSlugs()
@@ -29,7 +37,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     excerpt(toPlainText(exhibition.curatorialText)) ||
     [exhibition.title, exhibition.venue, exhibition.dateText].filter(Boolean).join(', ')
   const social =
-    socialImageUrl(exhibition.coverImage) || socialImageUrl(exhibition.works[0]?.coverImage)
+    socialImageUrl(exhibition.coverImage) ||
+    socialImageUrl(exhibition.installationImages?.[0]) ||
+    socialImageUrl(exhibition.works[0]?.coverImage)
   const url = `/exhibitions/${exhibition.slug}`
 
   return {
@@ -53,9 +63,20 @@ export default async function ExhibitionPage({ params }: Props) {
   if (!exhibition) notFound()
 
   const artistName = settings?.artistName || fallbackArtistName
+  const installations = exhibition.installationImages ?? []
+  const leads = installations.filter((image) => image.placement !== 'gallery')
+  const gallery = installations.filter((image) => image.placement === 'gallery')
+  const credit = [exhibition.curator, exhibition.dateText].filter(Boolean).join(' | ')
+  const hasText = Boolean(exhibition.curatorialText?.length)
+
+  const sections = [
+    gallery.length ? { id: INSTALLATION_SECTION_ID, label: 'Installation view' } : null,
+    exhibition.works.length ? { id: WORKS_SECTION_ID, label: 'Works' } : null,
+    hasText ? { id: TEXT_SECTION_ID, label: 'Text' } : null,
+  ].filter((item) => item !== null)
 
   return (
-    <div className={shell}>
+    <div className="mx-auto w-full max-w-[110rem] px-5 sm:px-10">
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -77,30 +98,52 @@ export default async function ExhibitionPage({ params }: Props) {
         }}
       />
 
-      <div className="pt-10 pb-8 sm:pt-14 sm:pb-10">
+      <header className="pt-8 pb-[10vh] sm:pt-10 sm:pb-[14vh]">
         <Link
           href="/exhibitions"
-          className="text-nav tracking-[0.1em] text-muted uppercase transition-colors hover:text-ink"
+          className="text-nav tracking-[0.1em] text-muted/60 uppercase transition-colors duration-500 hover:text-ink"
         >
           ← Selected Exhibitions
         </Link>
-        <h1 className="mt-5 text-xl leading-tight sm:text-2xl">{exhibition.title}</h1>
-        <p className="mt-2 text-muted">
-          {[exhibition.dateText, exhibition.venue].filter(Boolean).join(', ')}
-        </p>
-      </div>
 
-      {exhibition.curatorialText?.length ? (
-        <div className="hairline py-8 sm:py-10">
-          <RichText value={exhibition.curatorialText} />
+        <h1 className="mt-8 text-2xl leading-tight tracking-[-0.01em] sm:text-4xl">
+          {exhibition.title}
+        </h1>
+
+        {exhibition.venue ? <p className="mt-3 text-muted">{exhibition.venue}</p> : null}
+
+        {credit ? (
+          <p className="mt-1 text-nav tracking-[0.08em] text-muted/70 uppercase">{credit}</p>
+        ) : null}
+      </header>
+
+      {sections.length ? <SectionBar items={sections} /> : null}
+
+      {leads.length ? (
+        <div className="pt-[8vh] sm:pt-[10vh]">
+          <InstallationLeads images={leads} fallbackAlt={exhibition.title} />
+        </div>
+      ) : null}
+
+      {gallery.length ? (
+        <div className="pt-[14vh] sm:pt-[20vh]">
+          <InstallationGallery images={gallery} fallbackAlt={exhibition.title} />
         </div>
       ) : null}
 
       {exhibition.works.length ? (
-        <section className="pt-4">
-          <h2 className="pb-6 text-nav tracking-[0.14em] text-muted uppercase">Works</h2>
-          <WorksList works={exhibition.works} />
-        </section>
+        <div className="pt-[14vh] sm:pt-[20vh]">
+          <WorksGallery works={exhibition.works} />
+        </div>
+      ) : null}
+
+      {hasText ? (
+        <div
+          id={TEXT_SECTION_ID}
+          className="mt-[14vh] mb-[6vh] max-w-text scroll-mt-32 sm:mt-[20vh]"
+        >
+          <RichText value={exhibition.curatorialText} />
+        </div>
       ) : null}
     </div>
   )
