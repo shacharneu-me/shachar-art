@@ -43,6 +43,23 @@ export const work = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'scale',
+      title: 'Size on the Works page',
+      type: 'string',
+      initialValue: 'auto',
+      options: {
+        list: [
+          { title: 'Automatic', value: 'auto' },
+          { title: 'Large', value: 'large' },
+          { title: 'Medium', value: 'medium' },
+          { title: 'Small', value: 'small' },
+        ],
+        layout: 'radio',
+      },
+      description:
+        'Automatic lets the page vary the size as you scroll. Set it when a work should carry more or less weight than that.',
+    }),
+    defineField({
       name: 'images',
       title: 'More images',
       type: 'array',

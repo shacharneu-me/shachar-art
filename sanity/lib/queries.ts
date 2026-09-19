@@ -18,6 +18,7 @@ const WORK = /* groq */ `{
   "year": string::split(coalesce(date, ""), "-")[0],
   materials,
   text,
+  scale,
   coverImage ${IMAGE},
   "images": images[] ${IMAGE},
   "series": *[_type == "series" && references(^._id)][0] { _id, title },

@@ -55,6 +55,8 @@ export type Work = {
   year: string
   materials?: string | null
   text?: PortableTextBlock[] | null
+  /** Chosen size on the Works page; 'auto' follows the page's own rhythm. */
+  scale?: 'auto' | 'large' | 'medium' | 'small' | null
   coverImage?: SanityImage | null
   images?: SanityImage[] | null
   /** Set when the work belongs to a series, so the page can group them. */

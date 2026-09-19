@@ -23,6 +23,15 @@ const placements = [
 
 const MAX_HEIGHT_VH = 88
 
+/** A chosen size overrides the rotation's width, but keeps its side of the page. */
+const widths = {
+  large: 'max-w-full sm:max-w-[92%]',
+  medium: 'max-w-[88%] sm:max-w-[58%]',
+  small: 'max-w-[60%] sm:max-w-[32%]',
+} as const
+
+const heightCaps = { large: 94, medium: 66, small: 44 } as const
+
 export function WorksList({ works }: { works: Work[] }) {
   const rows = buildWorkRows(works)
 
@@ -127,6 +136,10 @@ function WorkFigure({
 
   const { width, height } = imageDimensions(work.coverImage)
   const ratio = width / height
+  const chosen = work.scale && work.scale !== 'auto' ? widths[work.scale] : null
+  // Tall works hit the height cap long before the width one, so each chosen
+  // size needs its own cap or they all come out the same.
+  const heightCap = chosen ? heightCaps[work.scale as keyof typeof heightCaps] : MAX_HEIGHT_VH
 
   useEffect(() => {
     const reveal = revealRef.current
@@ -185,9 +198,9 @@ function WorkFigure({
     >
       <div
         ref={revealRef}
-        className={`w-full ${placement.width} ${revealClass(revealed)}`}
-        // Never wider than the work would be at full viewport height.
-        style={{ width: `min(100%, calc(${MAX_HEIGHT_VH}vh * ${ratio.toFixed(4)}))` }}
+        className={`w-full ${chosen ?? placement.width} ${revealClass(revealed)}`}
+        // Never wider than the work would be at its tallest allowed height.
+        style={{ width: `min(100%, calc(${heightCap}vh * ${ratio.toFixed(4)}))` }}
       >
         <div ref={driftRef} className="will-change-transform">
           <button
