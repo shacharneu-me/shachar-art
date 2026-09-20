@@ -37,7 +37,8 @@ export function SiteHeader({
       </div>
       {overlay ? null : (
         <div className={shell}>
-          <div className="hairline" />
+          {/* No rule, but it still holds the line's height so nothing shifts. */}
+          <div className="h-px" />
         </div>
       )}
     </header>

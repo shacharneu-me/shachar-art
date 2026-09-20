@@ -26,10 +26,9 @@ export default async function ExhibitionsPage() {
   const exhibitions = await getExhibitions()
 
   return (
-    <div className={`${shell} pt-6 sm:pt-8`}>
-      <h1 className="pb-8 text-nav tracking-[0.14em] text-muted uppercase sm:pb-10">
-        Exhibitions
-      </h1>
+    <div className={`${shell} pt-8 sm:pt-12`}>
+      {/* The nav already says Exhibitions; saying it twice is noise. */}
+      <h1 className="sr-only">Exhibitions</h1>
       {exhibitions.length ? (
         <ExhibitionCards exhibitions={exhibitions} />
       ) : (
