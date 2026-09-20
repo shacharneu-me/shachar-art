@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { EmptyState } from '@/components/empty-state'
-import { ExhibitionsList } from '@/components/exhibitions-list'
+import { ExhibitionCards } from '@/components/exhibition-cards'
 import { fallbackArtistName, shell } from '@/lib/site'
 import { getExhibitions, getSettings } from '@/sanity/lib/content'
 
@@ -27,9 +27,11 @@ export default async function ExhibitionsPage() {
 
   return (
     <div className={`${shell} pt-6 sm:pt-8`}>
-      <h1 className="sr-only">Exhibitions</h1>
+      <h1 className="pb-8 text-nav tracking-[0.14em] text-muted uppercase sm:pb-10">
+        Selected Exhibitions
+      </h1>
       {exhibitions.length ? (
-        <ExhibitionsList exhibitions={exhibitions} />
+        <ExhibitionCards exhibitions={exhibitions} />
       ) : (
         <EmptyState label="your first exhibition" />
       )}

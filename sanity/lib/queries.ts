@@ -63,7 +63,14 @@ export const exhibitionsQuery = defineQuery(`*[_type == "exhibition" && defined(
     title,
     "slug": slug.current,
     dateText,
+    "year": string::split(coalesce(date, ""), "-")[0],
     venue,
+    indexCardAlt,
+    "cardImage": coalesce(indexCardImage, coverImage) {
+      crop,
+      hotspot,
+      asset->{ _id, url, metadata { lqip, dimensions } }
+    },
     "workCount": count(works)
   }`)
 

@@ -30,6 +30,32 @@ export function socialImageUrl(image: SanityImage | null | undefined): string | 
   }
 }
 
+/**
+ * A URL cropped to an exact shape, honouring the crop box and focal point set
+ * in the Studio. Used where the frame is fixed and the artist decides what
+ * stays in it, rather than the picture's own proportions deciding.
+ */
+export function croppedImageUrl(
+  image: SanityImage | null | undefined,
+  width: number,
+  height: number,
+): string | null {
+  if (!image?.asset?._id) return null
+
+  try {
+    return builder
+      .image(image)
+      .width(width)
+      .height(height)
+      .fit('crop')
+      .crop(image.hotspot ? 'focalpoint' : 'center')
+      .auto('format')
+      .url()
+  } catch {
+    return null
+  }
+}
+
 export function imageDimensions(image: SanityImage | null | undefined): {
   width: number
   height: number

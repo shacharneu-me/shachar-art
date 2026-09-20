@@ -66,6 +66,23 @@ export const exhibition = defineType({
         'Works shown in this exhibition. Drag to reorder. Each work automatically links back to this exhibition.',
     }),
     defineField({
+      name: 'indexCardImage',
+      title: 'Index card image',
+      type: 'image',
+      // Sanity's own hotspot tool is the crop control: drag the focal point and
+      // the crop box, and both are stored on the image and applied on the site.
+      options: { hotspot: true },
+      description:
+        'Shown only on the Exhibitions index, in a wide card. Use the crop tool to choose which part of the picture stays visible at that shape.',
+    }),
+    defineField({
+      name: 'indexCardAlt',
+      title: 'Index card image description',
+      type: 'string',
+      description:
+        'Optional. Describes the card image for screen readers. The title and venue are already read out, so only add what the picture itself shows.',
+    }),
+    defineField({
       name: 'coverImage',
       title: 'Sharing image',
       type: 'figure',

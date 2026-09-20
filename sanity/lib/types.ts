@@ -5,6 +5,8 @@ export type SanityImage = {
   alt?: string | null
   caption?: string | null
   hotspot?: { x: number; y: number } | null
+  /** The crop box set in the Studio, as fractions trimmed from each side. */
+  crop?: { top: number; bottom: number; left: number; right: number } | null
   asset?: {
     _id: string
     url: string
@@ -69,7 +71,10 @@ export type ExhibitionListItem = {
   title: string
   slug: string
   dateText: string
+  year?: string | null
   venue?: string | null
+  indexCardAlt?: string | null
+  cardImage?: SanityImage | null
   workCount: number
 }
 
