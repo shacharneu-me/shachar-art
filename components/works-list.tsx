@@ -81,14 +81,15 @@ const revealClass = (revealed: boolean) =>
     revealed ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
   }`
 
-/** The tallest a series row is allowed to get, so a pair of tall works fits. */
-const SERIES_HEIGHT_VH = 58
+/** A series fills the width unless that would push it past this much height. */
+const SERIES_HEIGHT_VH = 80
 
 /**
  * A series reads as one piece. Giving each work a flex-grow of its aspect ratio
  * makes the row fill the width exactly with every work the same height, so they
- * line up without any measuring. On a phone they fall into two columns instead,
- * which keeps them from shrinking to nothing.
+ * line up without any measuring. It stays a single row at every size: wrapping
+ * turned a set of five into three stacked rows, which read as separate works
+ * rather than one.
  */
 function SeriesRow({ row }: { row: WorkRow }) {
   const { openWork } = useWorkModal()
@@ -105,9 +106,15 @@ function SeriesRow({ row }: { row: WorkRow }) {
     <li id={row.anchorId} className="my-[14vh] scroll-mt-32 first:mt-[6vh] sm:my-[24vh]">
       <div ref={ref} className={revealClass(revealed)}>
         <div
-          // Capping the row's width is what caps its height.
-          style={{ '--series-max': `calc(${SERIES_HEIGHT_VH}vh * ${total.toFixed(4)})` } as React.CSSProperties}
-          className="mx-auto grid grid-cols-2 items-end gap-x-4 gap-y-8 sm:flex sm:max-w-(--series-max) sm:gap-8"
+          // Capping the row's width is what caps its height. The gaps sit
+          // between the pictures, so they have to be added back or the row
+          // lands short of the height it was allowed.
+          style={
+            {
+              '--series-max': `calc(${SERIES_HEIGHT_VH}vh * ${total.toFixed(4)} + ${(row.works.length - 1) * 32}px)`,
+            } as React.CSSProperties
+          }
+          className="mx-auto flex max-w-(--series-max) items-end gap-2 sm:gap-8"
         >
           {row.works.map((work, index) => (
             <button
@@ -121,7 +128,7 @@ function SeriesRow({ row }: { row: WorkRow }) {
               <SanityImage
                 image={work.coverImage}
                 fallbackAlt={work.title}
-                sizes="(min-width: 640px) 45vw, 45vw"
+                sizes="(min-width: 640px) 45vw, 30vw"
                 className="h-auto w-full shadow-[0_50px_90px_-50px_rgba(0,0,0,0.4)] transition-opacity duration-1000 group-hover:opacity-90"
               />
             </button>
