@@ -8,8 +8,8 @@ import type { ExhibitionListItem } from '@/sanity/lib/types'
  * decide the composition; the crop set in the Studio does. Each breakpoint asks
  * Sanity for that exact shape rather than letting the browser trim a wider one.
  */
-const WIDE = { w: 2400, h: 600 } // 4 / 1
-const NARROW = { w: 1100, h: 500 } // 2.2 / 1
+const WIDE = { w: 2500, h: 500 } // 5 / 1
+const NARROW = { w: 1300, h: 500 } // 2.6 / 1
 
 export function ExhibitionCards({ exhibitions }: { exhibitions: ExhibitionListItem[] }) {
   return (
@@ -23,7 +23,7 @@ export function ExhibitionCards({ exhibitions }: { exhibitions: ExhibitionListIt
           <li key={exhibition._id}>
             <Link
               href={`/exhibitions/${exhibition.slug}`}
-              className="group relative block aspect-[2.2/1] overflow-hidden focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-ink sm:aspect-[4/1]"
+              className="group relative block aspect-[2.6/1] overflow-hidden focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-ink sm:aspect-[5/1]"
             >
               {narrow ? (
                 <picture>
@@ -45,7 +45,7 @@ export function ExhibitionCards({ exhibitions }: { exhibitions: ExhibitionListIt
               {/* Legibility only: the top of the picture stays untouched. */}
               <div
                 aria-hidden="true"
-                className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent"
+                className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"
               />
 
               <div
@@ -55,13 +55,13 @@ export function ExhibitionCards({ exhibitions }: { exhibitions: ExhibitionListIt
                 <h2
                   // A long title can wrap past the gradient onto a bright part
                   // of the picture; the shadow carries it without dimming more.
-                  className="font-medium text-white [text-shadow:0_1px_12px_rgba(0,0,0,0.45)]"
-                  style={{ fontSize: 'clamp(22px, 3vw, 42px)', lineHeight: 1.1 }}
+                  className="font-normal text-white [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]"
+                  style={{ fontSize: 'clamp(15px, 1.5vw, 22px)', lineHeight: 1.25 }}
                 >
                   {exhibition.title}
                 </h2>
 
-                <p className="mt-2 flex items-center gap-2 text-[15px] text-white/80 [text-shadow:0_1px_10px_rgba(0,0,0,0.4)]">
+                <p className="mt-1.5 flex items-center gap-2 text-[0.6875rem] tracking-[0.08em] text-white/70 uppercase [text-shadow:0_1px_10px_rgba(0,0,0,0.5)]">
                   {meta ? <span>{meta}</span> : null}
                   <span
                     aria-hidden="true"
