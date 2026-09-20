@@ -19,8 +19,6 @@ export type WorkRow = {
   works: Work[]
   /** Set when this row is where a year first appears. */
   anchorId?: string
-  /** The year that starts here, shown as a faint marker above the work. */
-  year?: string
 }
 
 /**
@@ -50,7 +48,6 @@ export function buildWorkRows(works: Work[]): WorkRow[] {
     if (!year) continue
     anchored.add(year)
     row.anchorId = yearAnchorId(year)
-    row.year = year
   }
 
   return rows
