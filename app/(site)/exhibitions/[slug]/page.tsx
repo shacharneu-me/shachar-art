@@ -57,7 +57,9 @@ export default async function ExhibitionPage({ params }: Props) {
 
   const artistName = settings?.artistName || fallbackArtistName
   const installations = exhibition.installationImages ?? []
-  const credit = [exhibition.curator, exhibition.dateText].filter(Boolean).join(' | ')
+  const credit = [exhibition.curator && `Curator: ${exhibition.curator}`, exhibition.dateText]
+    .filter(Boolean)
+    .join(' | ')
   const hasText = Boolean(exhibition.curatorialText?.length)
 
   return (

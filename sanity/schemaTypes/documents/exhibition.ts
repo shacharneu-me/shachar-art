@@ -42,7 +42,7 @@ export const exhibition = defineType({
       name: 'curator',
       title: 'Curator',
       type: 'string',
-      description: 'Optional. Shown next to the date, e.g. “Curated by Ruti Sela”.',
+      description: 'Optional. Just the name — the site puts “Curator:” in front of it.',
     }),
     defineField({
       name: 'installationImages',
