@@ -27,6 +27,7 @@ export function WorkModal({
   const touch = useRef<{ x: number; y: number } | null>(null)
   const headingId = useId()
   const [zoomed, setZoomed] = useState<number | null>(null)
+  const [shown, setShown] = useState(0)
 
   const work = index === null ? null : (works[index] ?? null)
   const many = works.length > 1
@@ -36,6 +37,7 @@ export function WorkModal({
   if (shownWork !== work) {
     setShownWork(work)
     setZoomed(null)
+    setShown(0)
   }
 
   // Paging to the next work in a series should start it from the top.
@@ -94,6 +96,8 @@ export function WorkModal({
         Boolean(image?.asset?.url),
       )
     : []
+
+  const picture = images[shown] ?? images[0] ?? null
 
   return (
     <dialog
@@ -174,38 +178,34 @@ export function WorkModal({
           </div>
 
           <div className="grid gap-8 px-5 py-6 sm:px-8 sm:py-8 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:gap-12">
-            <div className="space-y-8">
-              {images.map((image, index) => {
-                const isZoomed = zoomed === index
-
-                return (
-                  <figure key={image.asset?._id ?? index}>
-                    <div className={isZoomed ? 'overflow-auto' : ''}>
-                      <button
-                        type="button"
-                        onClick={() => setZoomed(isZoomed ? null : index)}
-                        aria-label={isZoomed ? 'Zoom out' : 'Zoom in'}
-                        className={`block ${isZoomed ? 'w-[220%] cursor-zoom-out' : 'w-full cursor-zoom-in'}`}
-                      >
-                        <SanityImage
-                          image={image}
-                          fallbackAlt={work.title}
-                          sizes={isZoomed ? '220vw' : '(min-width: 768px) 62vw, 92vw'}
-                          // Unzoomed, a work is held within the visible area so
-                          // the whole thing is readable without scrolling.
-                          className={
-                            isZoomed
-                              ? 'h-auto w-full'
-                              : 'mx-auto h-auto max-h-[58dvh] w-auto max-w-full sm:max-h-[68dvh]'
-                          }
-                          priority={index === 0}
-                        />
-                      </button>
-                    </div>
-                    {image.caption ? <Caption>{image.caption}</Caption> : null}
-                  </figure>
-                )
-              })}
+            <div>
+              {picture ? (
+                <figure>
+                  <div className={zoomed !== null ? 'overflow-auto' : ''}>
+                    <button
+                      type="button"
+                      onClick={() => setZoomed(zoomed !== null ? null : shown)}
+                      aria-label={zoomed !== null ? 'Zoom out' : 'Zoom in'}
+                      className={`block ${zoomed !== null ? 'w-[220%] cursor-zoom-out' : 'w-full cursor-zoom-in'}`}
+                    >
+                      <SanityImage
+                        image={picture}
+                        fallbackAlt={work.title}
+                        sizes={zoomed !== null ? '220vw' : '(min-width: 768px) 62vw, 92vw'}
+                        // Unzoomed, a work is held within the visible area so
+                        // the whole thing is readable without scrolling.
+                        className={
+                          zoomed !== null
+                            ? 'h-auto w-full'
+                            : 'mx-auto h-auto max-h-[58dvh] w-auto max-w-full sm:max-h-[68dvh]'
+                        }
+                        priority
+                      />
+                    </button>
+                  </div>
+                  {picture.caption ? <Caption>{picture.caption}</Caption> : null}
+                </figure>
+              ) : null}
             </div>
 
             <div className="rule-list md:sticky md:top-24 md:self-start">
@@ -232,6 +232,36 @@ export function WorkModal({
               {work.text?.length ? (
                 <div>
                   <RichText value={work.text} />
+                </div>
+              ) : null}
+
+              {images.length > 1 ? (
+                <div>
+                  <ul className="flex flex-wrap gap-2">
+                    {images.map((image, thumb) => (
+                      <li key={image.asset?._id ?? thumb}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShown(thumb)
+                            setZoomed(null)
+                          }}
+                          aria-label={`Show image ${thumb + 1} of ${images.length}`}
+                          aria-current={thumb === shown ? 'true' : undefined}
+                          className={`block h-12 w-12 cursor-pointer overflow-hidden transition-opacity duration-500 ${
+                            thumb === shown ? 'opacity-100' : 'opacity-45 hover:opacity-80'
+                          }`}
+                        >
+                          <SanityImage
+                            image={image}
+                            fallbackAlt=""
+                            sizes="48px"
+                            className="h-full w-full object-cover"
+                          />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ) : null}
             </div>
