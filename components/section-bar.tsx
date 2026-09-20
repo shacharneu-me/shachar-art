@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 /** Ignore jitter, so the bar does not flicker while the page settles. */
-const THRESHOLD = 8
+const THRESHOLD = 4
 
 export type SectionBarItem = { id: string; label: string }
 
@@ -41,7 +41,7 @@ export function SectionBar({
     let last = window.scrollY
 
     const onScroll = () => {
-      const y = window.scrollY
+      const y = Math.max(0, window.scrollY)
 
       // Hold the bar open until a jump's smooth scroll has actually stopped.
       if (jumping.current) {
@@ -53,8 +53,10 @@ export function SectionBar({
         return
       }
 
-      if (Math.abs(y - last) < THRESHOLD) return
-      setHidden(y > last && y > top)
+      const delta = y - last
+      if (Math.abs(delta) < THRESHOLD) return
+      // Near the top there is nothing to tuck behind, so always show it.
+      setHidden(y > top && delta > 0)
       last = y
     }
 
@@ -74,7 +76,9 @@ export function SectionBar({
   return (
     <div
       style={{ top }}
-      className={`sticky z-20 -mx-5 bg-paper/70 backdrop-blur-sm transition-[translate,opacity] duration-500 sm:-mx-10 ${
+      // Solid rather than blurred: iOS will not repaint a sticky element that
+      // carries a backdrop-filter once it has been translated out of view.
+      className={`sticky z-20 -mx-5 bg-paper transition-[translate,opacity] duration-500 sm:-mx-10 ${
         hidden ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
       }`}
     >
