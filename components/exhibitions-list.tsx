@@ -8,16 +8,15 @@ const ICON = 96
 
 export function ExhibitionsList({ exhibitions }: { exhibitions: ExhibitionListItem[] }) {
   return (
-    <>
-      <ul className="[&>li:first-child]:border-t-0">
+    <ul className="flex flex-col gap-10 sm:gap-14">
         {exhibitions.map((exhibition) => {
           const icon = croppedImageUrl(exhibition.cardImage, ICON, ICON)
 
           return (
-            <li key={exhibition._id} className="hairline">
+            <li key={exhibition._id}>
               <Link
                 href={`/exhibitions/${exhibition.slug}`}
-                className="group flex items-start gap-4 py-6 sm:items-center sm:gap-6 sm:py-7"
+                className="group flex items-start gap-4 sm:items-center sm:gap-6"
               >
                 {icon ? (
                   // Sanity already returns this at exactly 96px with the crop
@@ -49,8 +48,6 @@ export function ExhibitionsList({ exhibitions }: { exhibitions: ExhibitionListIt
             </li>
           )
         })}
-      </ul>
-      <div className="hairline" />
-    </>
+    </ul>
   )
 }
