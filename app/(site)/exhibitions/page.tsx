@@ -8,14 +8,14 @@ import { getExhibitions, getSettings } from '@/sanity/lib/content'
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings()
   const artistName = settings?.artistName || fallbackArtistName
-  const description = `Selected exhibitions by ${artistName}.`
+  const description = `Exhibitions by ${artistName}.`
 
   return {
-    title: 'Selected Exhibitions',
+    title: 'Exhibitions',
     description,
     alternates: { canonical: '/exhibitions' },
     openGraph: {
-      title: `Selected Exhibitions — ${artistName}`,
+      title: `Exhibitions — ${artistName}`,
       description,
       url: '/exhibitions',
     },
@@ -27,7 +27,7 @@ export default async function ExhibitionsPage() {
 
   return (
     <div className={`${shell} pt-6 sm:pt-8`}>
-      <h1 className="sr-only">Selected Exhibitions</h1>
+      <h1 className="sr-only">Exhibitions</h1>
       {exhibitions.length ? (
         <ExhibitionsList exhibitions={exhibitions} />
       ) : (

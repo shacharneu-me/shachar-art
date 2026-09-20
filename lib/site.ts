@@ -9,7 +9,7 @@ export function absoluteUrl(path: string): string {
 
 export const navItems = [
   { href: '/works', label: 'Works' },
-  { href: '/exhibitions', label: 'Selected Exhibitions' },
+  { href: '/exhibitions', label: 'Exhibitions' },
   { href: '/about', label: 'About' },
 ] as const
 

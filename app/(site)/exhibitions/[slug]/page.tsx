@@ -90,7 +90,7 @@ export default async function ExhibitionPage({ params }: Props) {
           href="/exhibitions"
           className="text-nav tracking-[0.1em] text-muted/60 uppercase transition-colors duration-500 hover:text-ink"
         >
-          ← Selected Exhibitions
+          ← Exhibitions
         </Link>
 
         <h1 className="mt-8 text-2xl leading-tight tracking-[-0.01em] sm:text-4xl">
