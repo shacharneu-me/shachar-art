@@ -47,6 +47,7 @@ export function WorksList({ works }: { works: Work[] }) {
             placement={placements[index % placements.length]}
             priority={index === 0}
             anchorId={row.anchorId}
+            year={row.year}
           />
         ),
       )}
@@ -76,6 +77,12 @@ function useReveal() {
   return { ref, revealed }
 }
 
+/** The faint year that marks where a year's works begin. */
+function YearMark({ year }: { year?: string }) {
+  if (!year) return null
+  return <p className="mb-2 text-[0.6875rem] tracking-[0.12em] text-ink/25 tabular-nums">{year}</p>
+}
+
 const revealClass = (revealed: boolean) =>
   `transition-[opacity,transform] duration-[2200ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${
     revealed ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
@@ -103,8 +110,9 @@ function SeriesRow({ row }: { row: WorkRow }) {
   const name = row.works.find((work) => work.series?.title)?.series?.title
 
   return (
-    <li id={row.anchorId} className="my-[14vh] scroll-mt-32 first:mt-[6vh] sm:my-[24vh]">
+    <li id={row.anchorId} className="my-[9vh] scroll-mt-32 first:mt-[4vh] sm:my-[15vh]">
       <div ref={ref} className={revealClass(revealed)}>
+        <YearMark year={row.year} />
         <div
           // Capping the row's width is what caps its height. The gaps sit
           // between the pictures, so they have to be added back or the row
@@ -120,7 +128,7 @@ function SeriesRow({ row }: { row: WorkRow }) {
             <button
               key={work._id}
               type="button"
-              onClick={() => openWork(work)}
+              onClick={() => openWork(work, row.works)}
               aria-label={`${work.title}${work.displayDate ? `, ${work.displayDate}` : ''}`}
               style={{ flexGrow: ratios[index], flexBasis: 0 }}
               className="group min-w-0 cursor-pointer"
@@ -150,11 +158,13 @@ function WorkFigure({
   placement,
   priority,
   anchorId,
+  year,
 }: {
   work: Work
   placement: (typeof placements)[number]
   priority: boolean
   anchorId?: string
+  year?: string
 }) {
   const { openWork } = useWorkModal()
   const revealRef = useRef<HTMLDivElement>(null)
@@ -221,7 +231,7 @@ function WorkFigure({
   return (
     <li
       id={anchorId}
-      className={`my-[14vh] flex scroll-mt-32 first:mt-[6vh] sm:my-[24vh] ${placement.row}`}
+      className={`my-[9vh] flex scroll-mt-32 first:mt-[4vh] sm:my-[15vh] ${placement.row}`}
     >
       <div
         ref={revealRef}
@@ -230,6 +240,7 @@ function WorkFigure({
         style={{ width: `min(100%, calc(${heightCap}vh * ${ratio.toFixed(4)}))` }}
       >
         <div ref={driftRef} className="will-change-transform">
+          <YearMark year={year} />
           <button
             type="button"
             onClick={() => openWork(work)}

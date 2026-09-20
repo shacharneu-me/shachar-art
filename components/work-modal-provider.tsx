@@ -7,7 +7,8 @@ import { WorkModal } from '@/components/work-modal'
 import type { Work } from '@/sanity/lib/types'
 
 type WorkModalContextValue = {
-  openWork: (work: Work) => void
+  /** `siblings` is the set the work belongs to, so a series can be paged through. */
+  openWork: (work: Work, siblings?: Work[]) => void
   closeWork: () => void
 }
 
@@ -25,19 +26,37 @@ export function useWorkModal(): WorkModalContextValue {
  */
 export function WorkModalProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const [open, setOpen] = useState<{ work: Work; pathname: string } | null>(null)
+  const [open, setOpen] = useState<{ works: Work[]; index: number; pathname: string } | null>(null)
 
   // Recording the route an overlay was opened from means following the exhibition
   // link inside it closes the overlay, with no effect to keep the two in step.
-  const work = open?.pathname === pathname ? open.work : null
+  const current = open?.pathname === pathname ? open : null
 
-  const openWork = useCallback((next: Work) => setOpen({ work: next, pathname }), [pathname])
+  const openWork = useCallback(
+    (next: Work, siblings?: Work[]) => {
+      const works = siblings?.length ? siblings : [next]
+      const index = Math.max(0, works.indexOf(next))
+      setOpen({ works, index, pathname })
+    },
+    [pathname],
+  )
+
   const closeWork = useCallback(() => setOpen(null), [])
+
+  const setIndex = useCallback(
+    (index: number) => setOpen((state) => (state ? { ...state, index } : state)),
+    [],
+  )
 
   return (
     <WorkModalContext.Provider value={{ openWork, closeWork }}>
       {children}
-      <WorkModal work={work} onClose={closeWork} />
+      <WorkModal
+        works={current?.works ?? []}
+        index={current?.index ?? null}
+        onClose={closeWork}
+        onIndex={setIndex}
+      />
     </WorkModalContext.Provider>
   )
 }
