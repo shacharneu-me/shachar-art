@@ -28,7 +28,7 @@ export default async function ExhibitionsPage() {
   return (
     <div className={`${shell} pt-6 sm:pt-8`}>
       <h1 className="pb-8 text-nav tracking-[0.14em] text-muted uppercase sm:pb-10">
-        Selected Exhibitions
+        Exhibitions
       </h1>
       {exhibitions.length ? (
         <ExhibitionCards exhibitions={exhibitions} />
