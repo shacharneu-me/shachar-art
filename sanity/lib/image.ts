@@ -43,14 +43,10 @@ export function croppedImageUrl(
   if (!image?.asset?._id) return null
 
   try {
-    return builder
-      .image(image)
-      .width(width)
-      .height(height)
-      .fit('crop')
-      .crop(image.hotspot ? 'focalpoint' : 'center')
-      .auto('format')
-      .url()
+    // No .crop() call here on purpose: naming a crop mode makes the builder
+    // ignore the crop box saved in the Studio. Left alone, it derives the rect
+    // from that box and centres it on the focal point.
+    return builder.image(image).width(width).height(height).fit('crop').auto('format').url()
   } catch {
     return null
   }
