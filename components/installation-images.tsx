@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 
-import { Caption } from '@/components/caption'
 import { GalleryLabel, GalleryRail } from '@/components/horizontal-gallery'
 import { Lightbox, type LightboxItem } from '@/components/lightbox'
 import { SanityImage } from '@/components/sanity-image'
@@ -51,7 +50,6 @@ export function InstallationSection({
                   priority={index === 0}
                 />
               </button>
-              {image.caption ? <Caption>{image.caption}</Caption> : null}
             </figure>
           ))}
         </div>
@@ -77,8 +75,7 @@ export function InstallationSection({
                       className="h-[44vh] w-auto max-w-none sm:h-[62vh]"
                     />
                   </button>
-                  {image.caption ? <Caption>{image.caption}</Caption> : null}
-                </figure>
+                    </figure>
               </li>
             ))}
           </GalleryRail>

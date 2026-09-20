@@ -135,7 +135,7 @@ export function Lightbox({
         </button>
       ) : null}
 
-      <figure className="relative flex max-h-[80dvh] max-w-[80vw] flex-col items-center">
+      <figure className="relative flex max-h-[80dvh] max-w-[80vw] flex-col items-start">
         <SanityImage
           image={item.image}
           fallbackAlt={item.title ?? ''}
@@ -144,15 +144,16 @@ export function Lightbox({
           priority
         />
         {item.title || item.note || item.details ? (
-          <figcaption className="mt-3 max-w-full text-center text-[0.625rem] tracking-[0.07em] uppercase">
+          // Tucked under the picture's bottom-left corner, quiet enough to ignore.
+          <figcaption className="mt-1.5 max-w-full text-left text-[0.5625rem] leading-relaxed tracking-[0.07em] uppercase">
             {item.title || item.note ? (
-              <span className="flex justify-center gap-4 text-muted/70">
+              <span className="flex flex-wrap gap-x-3 text-muted/70">
                 {item.title ? <span>{item.title}</span> : null}
                 {item.note ? <span className="text-muted/50">{item.note}</span> : null}
               </span>
             ) : null}
             {item.details ? (
-              <span className="mt-1 block text-muted/50 normal-case">{item.details}</span>
+              <span className="block text-muted/50 normal-case">{item.details}</span>
             ) : null}
           </figcaption>
         ) : null}
