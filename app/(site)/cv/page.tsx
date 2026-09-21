@@ -31,7 +31,7 @@ export default async function CvPage() {
       <PageHeading title={cv?.heading || 'CV'} />
 
       {cv?.text?.length ? (
-        <div className="py-8 sm:py-10">
+        <div className="pb-8 sm:pb-10">
           <RichText value={cv.text} />
           {cv.file?.url ? (
             <p className="mt-10">
