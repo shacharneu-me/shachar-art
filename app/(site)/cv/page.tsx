@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 
 import { EmptyState } from '@/components/empty-state'
-import { PageHeading } from '@/components/page-heading'
 import { RichText } from '@/components/rich-text'
 import { fallbackArtistName, shell } from '@/lib/site'
 import { excerpt, toPlainText } from '@/lib/text'
@@ -28,10 +27,11 @@ export default async function CvPage() {
 
   return (
     <div className={shell}>
-      <PageHeading title={cv?.heading || 'CV'} />
+      <h1 className="sr-only">{cv?.heading || 'CV'}</h1>
 
       {cv?.text?.length ? (
-        <div className="pb-8 sm:pb-10">
+        // Same distance from the header as the About text.
+        <div className="py-8 sm:py-12">
           <RichText value={cv.text} />
           {cv.file?.url ? (
             <p className="mt-10">
