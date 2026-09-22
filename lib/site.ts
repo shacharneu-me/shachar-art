@@ -1,7 +1,13 @@
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(
-  /\/+$/,
-  '',
-)
+/** The one address the live site answers on; s-neuhaus.com redirects here. */
+const productionUrl = 'https://www.s-neuhaus.com'
+
+// Fixed for the live site, so canonicals and the sitemap always name the address
+// the domain settles on rather than one that redirects.
+export const siteUrl = (
+  process.env.VERCEL_ENV === 'production'
+    ? productionUrl
+    : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+).replace(/\/+$/, '')
 
 export function absoluteUrl(path: string): string {
   return `${siteUrl}${path.startsWith('/') ? path : `/${path}`}`
