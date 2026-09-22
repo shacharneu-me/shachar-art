@@ -9,14 +9,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const artistName = settings?.artistName || fallbackArtistName
   const description =
     settings?.siteDescription || `Selected works and exhibitions by ${artistName}.`
-  // Both spellings, so a search in either language lands here.
-  const title = `${artistName} | ${hebrewArtistName}`
 
   return {
-    title: { absolute: title },
-    description: `${description} ${hebrewArtistName}.`,
+    title: { absolute: artistName },
+    description,
     alternates: { canonical: '/' },
-    openGraph: { title, description, url: '/' },
+    openGraph: { title: artistName, description, url: '/' },
   }
 }
 

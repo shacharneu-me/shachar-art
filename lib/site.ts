@@ -27,6 +27,6 @@ export const shell = 'mx-auto w-full max-w-5xl px-5 sm:px-8'
 
 /**
  * The name as it is written in Hebrew, so a search for it finds the site too.
- * Search engines only match what the page actually carries.
+ * It is only ever given to search engines, never shown: the site stays English.
  */
 export const hebrewArtistName = 'שחר נויהאוז'
