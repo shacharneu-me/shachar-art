@@ -5,7 +5,7 @@ import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
 import { RichText } from '@/components/rich-text'
 import { SanityImage } from '@/components/sanity-image'
-import { absoluteUrl, fallbackArtistName, shell, siteUrl } from '@/lib/site'
+import { absoluteUrl, fallbackArtistName, hebrewArtistName, shell, siteUrl } from '@/lib/site'
 import { excerpt, toPlainText } from '@/lib/text'
 import { getAbout, getSettings } from '@/sanity/lib/content'
 
@@ -40,6 +40,7 @@ export default async function AboutPage() {
           '@type': 'Person',
           '@id': `${siteUrl}/#person`,
           name: artistName,
+          alternateName: hebrewArtistName,
           ...(settings?.role ? { jobTitle: settings.role } : {}),
           ...(settings?.email ? { email: settings.email } : {}),
           ...(settings?.instagram ? { sameAs: [settings.instagram] } : {}),

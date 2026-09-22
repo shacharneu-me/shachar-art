@@ -18,3 +18,9 @@ export const fallbackArtistName = 'Artist'
 
 /** The single horizontal measure every section lines up to. */
 export const shell = 'mx-auto w-full max-w-5xl px-5 sm:px-8'
+
+/**
+ * The name as it is written in Hebrew, so a search for it finds the site too.
+ * Search engines only match what the page actually carries.
+ */
+export const hebrewArtistName = 'שחר נויהאוז'

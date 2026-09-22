@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 import { JsonLd } from '@/components/json-ld'
-import { fallbackArtistName, siteUrl } from '@/lib/site'
+import { absoluteUrl, fallbackArtistName, hebrewArtistName, siteUrl } from '@/lib/site'
 import { getSettings } from '@/sanity/lib/content'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -9,12 +9,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const artistName = settings?.artistName || fallbackArtistName
   const description =
     settings?.siteDescription || `Selected works and exhibitions by ${artistName}.`
+  // Both spellings, so a search in either language lands here.
+  const title = `${artistName} | ${hebrewArtistName}`
 
   return {
-    title: { absolute: artistName },
-    description,
+    title: { absolute: title },
+    description: `${description} ${hebrewArtistName}.`,
     alternates: { canonical: '/' },
-    openGraph: { title: artistName, description, url: '/' },
+    openGraph: { title, description, url: '/' },
   }
 }
 
@@ -32,11 +34,24 @@ export default async function LandingPage() {
           '@type': 'WebSite',
           '@id': `${siteUrl}/#website`,
           name: artistName,
+          alternateName: hebrewArtistName,
           url: `${siteUrl}/`,
           inLanguage: 'en',
         }}
       />
-      <h1 className="sr-only">{artistName}</h1>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          '@id': `${siteUrl}/#person`,
+          name: artistName,
+          alternateName: hebrewArtistName,
+          url: absoluteUrl('/about'),
+        }}
+      />
+      <h1 className="sr-only">
+        {artistName} <span lang="he">{hebrewArtistName}</span>
+      </h1>
     </div>
   )
 }
