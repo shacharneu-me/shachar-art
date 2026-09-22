@@ -30,3 +30,20 @@ export const shell = 'mx-auto w-full max-w-5xl px-5 sm:px-8'
  * It is only ever given to search engines, never shown: the site stays English.
  */
 export const hebrewArtistName = 'שחר נויהאוז'
+
+/**
+ * A profile link as pasted from an app's share sheet carries tracking and stray
+ * spaces ("…/shachar.neu?utm_source=qr "). Search engines match the bare address.
+ */
+export function cleanProfileUrl(url?: string | null): string | null {
+  const trimmed = url?.trim()
+  if (!trimmed) return null
+  try {
+    const parsed = new URL(trimmed)
+    parsed.search = ''
+    parsed.hash = ''
+    return parsed.toString()
+  } catch {
+    return trimmed
+  }
+}

@@ -5,7 +5,14 @@ import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
 import { RichText } from '@/components/rich-text'
 import { SanityImage } from '@/components/sanity-image'
-import { absoluteUrl, fallbackArtistName, hebrewArtistName, shell, siteUrl } from '@/lib/site'
+import {
+  absoluteUrl,
+  cleanProfileUrl,
+  fallbackArtistName,
+  hebrewArtistName,
+  shell,
+  siteUrl,
+} from '@/lib/site'
 import { excerpt, toPlainText } from '@/lib/text'
 import { getAbout, getSettings } from '@/sanity/lib/content'
 
@@ -30,6 +37,7 @@ export default async function AboutPage() {
   const [settings, about] = await Promise.all([getSettings(), getAbout()])
   const artistName = settings?.artistName || fallbackArtistName
   const hasImage = Boolean(about?.image?.asset?.url)
+  const instagram = cleanProfileUrl(settings?.instagram)
 
   return (
     <div className={shell}>
@@ -43,7 +51,7 @@ export default async function AboutPage() {
           alternateName: hebrewArtistName,
           ...(settings?.role ? { jobTitle: settings.role } : {}),
           ...(settings?.email ? { email: settings.email } : {}),
-          ...(settings?.instagram ? { sameAs: [settings.instagram] } : {}),
+          ...(instagram ? { sameAs: [instagram] } : {}),
           description: excerpt(toPlainText(about?.text), 300) || undefined,
           url: absoluteUrl('/about'),
         }}

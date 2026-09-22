@@ -1,7 +1,13 @@
 import type { Metadata } from 'next'
 
 import { JsonLd } from '@/components/json-ld'
-import { absoluteUrl, fallbackArtistName, hebrewArtistName, siteUrl } from '@/lib/site'
+import {
+  absoluteUrl,
+  cleanProfileUrl,
+  fallbackArtistName,
+  hebrewArtistName,
+  siteUrl,
+} from '@/lib/site'
 import { getSettings } from '@/sanity/lib/content'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LandingPage() {
   const settings = await getSettings()
   const artistName = settings?.artistName || fallbackArtistName
+  const instagram = cleanProfileUrl(settings?.instagram)
 
   return (
     <div className="h-dvh">
@@ -44,6 +51,8 @@ export default async function LandingPage() {
           '@id': `${siteUrl}/#person`,
           name: artistName,
           alternateName: hebrewArtistName,
+          // Ties the site to the profile, which carries the Hebrew name in view.
+          ...(instagram ? { sameAs: [instagram] } : {}),
           url: absoluteUrl('/about'),
         }}
       />

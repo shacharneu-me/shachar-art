@@ -1,7 +1,7 @@
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { WorkModalProvider } from '@/components/work-modal-provider'
-import { fallbackArtistName } from '@/lib/site'
+import { cleanProfileUrl, fallbackArtistName } from '@/lib/site'
 import { getSettings } from '@/sanity/lib/content'
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +24,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         <SiteFooter
           artistName={artistName}
           email={settings?.email}
-          instagram={settings?.instagram}
+          instagram={cleanProfileUrl(settings?.instagram)}
         />
       </WorkModalProvider>
     </div>
