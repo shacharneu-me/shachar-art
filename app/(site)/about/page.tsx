@@ -41,6 +41,8 @@ export default async function AboutPage() {
   const artistName = settings?.artistName || fallbackArtistName
   const hasImage = Boolean(about?.image?.asset?.url)
   const instagram = cleanProfileUrl(settings?.instagram)
+  // Gmail ignores capitals, and lower case sits quieter at reading size.
+  const email = settings?.email?.trim().toLowerCase()
 
   return (
     <div className={shell}>
@@ -78,22 +80,19 @@ export default async function AboutPage() {
           <div>
             <RichText value={about?.text} />
             {/* The footer carries these too, but a reader who stops at the end
-                of the text should not have to go looking for them. */}
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-nav tracking-[0.1em] uppercase">
-              <li>
-                <Link href="/cv" className={contactLink}>
-                  CV
-                </Link>
-              </li>
-              {settings?.email ? (
-                <li>
-                  <a href={`mailto:${settings.email}`} className={contactLink}>
-                    {settings.email}
+                of the text should not have to go looking for them. The email is
+                set in reading size: it is the one thing here worth acting on. */}
+            <div className="mt-10">
+              <div className="hairline mb-6" />
+              {email ? (
+                <p className="text-[18px] sm:text-[20px]">
+                  <a href={`mailto:${email}`} className={contactLink}>
+                    {email}
                   </a>
-                </li>
+                </p>
               ) : null}
               {instagram ? (
-                <li>
+                <p className="mt-2 text-nav tracking-[0.1em] text-muted uppercase">
                   <a
                     href={instagram}
                     target="_blank"
@@ -102,9 +101,16 @@ export default async function AboutPage() {
                   >
                     Instagram
                   </a>
-                </li>
+                </p>
               ) : null}
-            </ul>
+            </div>
+
+            {/* Further down and quieter: reading is not why anyone is here. */}
+            <p className="mt-12 text-nav tracking-[0.1em] text-muted uppercase">
+              <Link href="/cv" className={contactLink}>
+                CV
+              </Link>
+            </p>
           </div>
         </div>
       ) : (
