@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { JsonLd } from '@/components/json-ld'
+import { ScrollGate } from '@/components/scroll-gate'
 import {
   absoluteUrl,
   cleanProfileUrl,
@@ -56,6 +57,8 @@ export default async function LandingPage() {
           url: absoluteUrl('/about'),
         }}
       />
+      {/* Scrolling down off the image carries on into the works. */}
+      <ScrollGate to="/works" edge="bottom" />
       <h1 className="sr-only">
         {artistName} <span lang="he">{hebrewArtistName}</span>
       </h1>

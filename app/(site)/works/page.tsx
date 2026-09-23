@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import { EmptyState } from '@/components/empty-state'
 import { JsonLd } from '@/components/json-ld'
+import { ScrollGate } from '@/components/scroll-gate'
 import { WorksList } from '@/components/works-list'
 import { WorksYearBar } from '@/components/works-year-bar'
 import { absoluteUrl, fallbackArtistName, shell } from '@/lib/site'
@@ -29,6 +30,8 @@ export default async function WorksPage() {
   return (
     <div className="mx-auto w-full max-w-[110rem] px-5 sm:px-10">
       <h1 className="sr-only">Works</h1>
+      {/* Pulling up past the top goes back to the landing image it came from. */}
+      <ScrollGate to="/" edge="top" />
       {works.length ? (
         <JsonLd
           data={{
