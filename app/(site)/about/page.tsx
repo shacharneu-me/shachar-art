@@ -81,7 +81,8 @@ export default async function AboutPage() {
             <RichText value={about?.text} />
             {/* The footer carries these too, but a reader who stops at the end
                 of the text should not have to go looking for them. */}
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-nav tracking-[0.1em] uppercase">
+            <h2 className="mt-8 text-nav tracking-[0.1em] text-muted uppercase">Contact</h2>
+            <ul className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-nav tracking-[0.1em] uppercase">
               {email ? (
                 <li>
                   <a href={`mailto:${email}`} className={contactLink}>
@@ -102,8 +103,8 @@ export default async function AboutPage() {
                 </li>
               ) : null}
             </ul>
-            {/* A line below, so it is not read as one of the ways to reach him. */}
-            <p className="mt-2 text-nav tracking-[0.1em] uppercase">
+            {/* Set apart, so it is not read as one of the ways to reach him. */}
+            <p className="mt-7 text-nav tracking-[0.1em] uppercase">
               <Link href="/cv" className={contactLink}>
                 CV
               </Link>
