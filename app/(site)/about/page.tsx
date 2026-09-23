@@ -73,40 +73,41 @@ export default async function AboutPage() {
               image={about?.image}
               fallbackAlt={artistName}
               sizes="(min-width: 768px) 40vw, 92vw"
-              className="h-auto w-full"
+              className="order-1 h-auto w-full md:col-start-1 md:row-start-1"
               priority
             />
           ) : null}
-          <div>
+          <div className={hasImage ? 'order-2 md:col-start-2 md:row-span-2 md:row-start-1' : ''}>
             <RichText value={about?.text} />
-            {/* The footer carries these too, but a reader who stops at the end
-                of the text should not have to go looking for them. The email is
-                set in reading size: it is the one thing here worth acting on. */}
-            <div className="mt-10">
-              <div className="hairline mb-6" />
-              {email ? (
-                <p className="text-[18px] sm:text-[20px]">
-                  <a href={`mailto:${email}`} className={contactLink}>
-                    {email}
-                  </a>
-                </p>
-              ) : null}
-              {instagram ? (
-                <p className="mt-2 text-nav tracking-[0.1em] text-muted uppercase">
-                  <a
-                    href={instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={contactLink}
-                  >
-                    Instagram
-                  </a>
-                </p>
-              ) : null}
-            </div>
+          </div>
 
-            {/* Further down and quieter: reading is not why anyone is here. */}
-            <p className="mt-12 text-nav tracking-[0.1em] text-muted uppercase">
+          {/* Under the photograph on a wide screen, after the text on a narrow
+              one: near at hand either way, without interrupting the reading. */}
+          <div className={`order-3 ${hasImage ? 'md:col-start-1 md:row-start-2' : ''}`}>
+            <h2 className="text-nav tracking-[0.1em] text-muted uppercase">Contact</h2>
+            {email ? (
+              <p className="mt-3">
+                <a href={`mailto:${email}`} className={contactLink}>
+                  {email}
+                </a>
+              </p>
+            ) : null}
+            {instagram ? (
+              <p className="mt-1">
+                <a
+                  href={instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={contactLink}
+                >
+                  Instagram
+                </a>
+              </p>
+            ) : null}
+
+            {/* Lower and quieter than the contact: reading the CV is not why
+                anyone comes here. */}
+            <p className="mt-10 text-nav tracking-[0.1em] text-muted uppercase">
               <Link href="/cv" className={contactLink}>
                 CV
               </Link>
