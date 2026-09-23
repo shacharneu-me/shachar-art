@@ -24,8 +24,19 @@ export function LandingCurtain({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (phase === 'lifting') {
+      // The scroll that left the landing keeps running under the curtain, so
+      // the page would be uncovered part-way down with its jump bar already
+      // tucked away. Hold it still at the top until the curtain has gone.
+      const { style } = document.documentElement
+      const previous = style.overflow
+      style.overflow = 'hidden'
+      window.scrollTo(0, 0)
+
       const timer = setTimeout(() => setPhase('gone'), SLIDE_MS)
-      return () => clearTimeout(timer)
+      return () => {
+        style.overflow = previous
+        clearTimeout(timer)
+      }
     }
 
     if (phase === 'entering') {
