@@ -33,6 +33,9 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+const contactLink =
+  'underline decoration-1 underline-offset-4 transition-colors hover:text-muted'
+
 export default async function AboutPage() {
   const [settings, about] = await Promise.all([getSettings(), getAbout()])
   const artistName = settings?.artistName || fallbackArtistName
@@ -74,14 +77,34 @@ export default async function AboutPage() {
           ) : null}
           <div>
             <RichText value={about?.text} />
-            <p className="mt-8">
-              <Link
-                href="/cv"
-                className="text-nav tracking-[0.1em] uppercase underline decoration-1 underline-offset-4 transition-colors hover:text-muted"
-              >
-                CV
-              </Link>
-            </p>
+            {/* The footer carries these too, but a reader who stops at the end
+                of the text should not have to go looking for them. */}
+            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-nav tracking-[0.1em] uppercase">
+              <li>
+                <Link href="/cv" className={contactLink}>
+                  CV
+                </Link>
+              </li>
+              {settings?.email ? (
+                <li>
+                  <a href={`mailto:${settings.email}`} className={contactLink}>
+                    {settings.email}
+                  </a>
+                </li>
+              ) : null}
+              {instagram ? (
+                <li>
+                  <a
+                    href={instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={contactLink}
+                  >
+                    Instagram
+                  </a>
+                </li>
+              ) : null}
+            </ul>
           </div>
         </div>
       ) : (
