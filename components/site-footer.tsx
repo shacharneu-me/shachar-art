@@ -1,4 +1,4 @@
-import { shell } from '@/lib/site'
+import { hebrewArtistName, shell } from '@/lib/site'
 
 export function SiteFooter({
   artistName,
@@ -16,6 +16,13 @@ export function SiteFooter({
         <div className="flex flex-col gap-2 py-6 text-nav tracking-[0.06em] text-muted uppercase sm:flex-row sm:items-center sm:justify-between">
           <p>
             © {new Date().getFullYear()} {artistName}
+            {/* The one piece of Hebrew on the site. A search for the name as it
+                is written in Hebrew only finds a site that carries it in view;
+                hidden markup counts for little. Set small and quiet, in its own
+                direction so the characters order correctly. */}
+            <span lang="he" dir="rtl" className="ml-3 tracking-normal normal-case">
+              {hebrewArtistName}
+            </span>
           </p>
           <ul className="flex flex-wrap gap-x-5 gap-y-1">
             {email ? (
